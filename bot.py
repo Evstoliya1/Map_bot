@@ -1,6 +1,8 @@
 import telebot
 from config import *
 from logic import *
+from answer import *
+
 
 bot = telebot.TeleBot(TOKEN)
 
@@ -14,8 +16,6 @@ def handle_help(message):
         bot.send_message(message.chat.id, "Доступные команды: /show_city [город], /remember_city [город], /show_my_cities")
 
 
-
-
 @bot.message_handler(commands=['show_city'])
 def handle_show_city(message):
     city_name = message.text.split()[-1]
@@ -24,6 +24,7 @@ def handle_show_city(message):
     manager.create_graph(f'{user_id}.png', [city_name])  # Создание карты для города
     with open(f'{user_id}.png', 'rb') as map:  # Открытие и отправка карты пользователю
         bot.send_photo(user_id, map)
+        bot.send_message(message.chat.id, random_answer)
 
 
 @bot.message_handler(commands=['remember_city'])
